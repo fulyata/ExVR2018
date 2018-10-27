@@ -3,39 +3,50 @@ class TMatrix:
     def __init__(self, matrix_4x4=None):
         if matrix_4x4 == None:
             # create a identity matrix, if no parameters are given
-            self.matrix_4x4 = [[1, 0, 0, 0], #column 1
-                               [0, 1, 0, 0], 
-                               [0, 0, 1, 0],
-                               [0, 0, 0, 1]]
+            self.matrix_4x4 = [1, 0, 0, 0, 
+                               0, 1, 0, 0,
+                               0, 0, 1, 0,
+                               0, 0, 0, 1]
         else:
             # create a matrix in column-major order
             self.matrix_4x4 = matrix_4x4
 
-        def mult(self, other_matrix):
-            # multiply 
-            if type(self) != type(other_matrix):
-                print("The matrix is not in the dimention 4x4, please enter a 4x4 matrix")
+    def mult(self, other_matrix):
+        # multiply 
+        if type(self) != type(other_matrix):
+            print("The matrix is not in the dimention 4x4, please enter a 4x4 matrix")
 
-            temp_4x4 = [[0, 0, 0, 0],
-                        [0, 0, 0, 0],
-                        [0, 0, 0, 0],
-                        [0, 0, 0, 0]]
-            temp_4x4[0][0] = self.matrix_4x4[0][0] * other_matrix.matrix_4x4[0][0]
-            temp_4x4[1][0] = self.matrix_4x4[0][0] * other_matrix.matrix_4x4[0][0]
-            
-            #for coloumn in coloumns_list:
-            #    for row in range (0, 4):
-            #        result = self.[row][coloumn] * other_matrix.[coloumn]
+        result = [0, 0, 0, 0,
+                  0, 0, 0, 0,
+                  0, 0, 0, 0,
+                  0, 0, 0, 0]
+        A = self.matrix_4x4
+        B = other_matrix.matrix_4x4
+        """ result[0] = A[0] * B[0] + A[4] * B[1] + A[8] * B[2] + A[12] * B[3]
+        result[1] = A[1] * B[0] + A[5] * B[1] + A[9] * B[2] + A[13] * B[3]
+        result[2] = A[2] * B[0] + A[6] * B[1] + A[10] * B[2] + A[14] * B[3]
+        result[3] = A[3] * B[0] + A[7] * B[1] + A[11] * B[2] + A[15] * B[3]
+
+        result[4] = A[0] * B[4] + A[4] * B[5] + A[8] * B[6] + A[12] * B[7]
+        result[5] = A[1] * B[4] + A[5] * B[5] + A[9] * B[6] + A[13] * B[7]"""
+
+        for i in range(4):
+            result[i * 4 + 0] = A[0] * B[i * 4] + A[4] * B[i * 4 + 1] + A[8] * B[i * 4 + 2] + A[12] * B[i * 4 + 3]
+            result[i * 4 + 1] = A[1] * B[i * 4] + A[5] * B[i * 4 + 1] + A[9] * B[i * 4 + 2] + A[13] * B[i * 4 + 3]
+            result[i * 4 + 2] = A[2] * B[i * 4] + A[6] * B[i * 4 + 1] + A[10] * B[i * 4 + 2] + A[14] * B[i * 4 + 3]
+            result[i * 4 + 3] = A[3] * B[i * 4] + A[7] * B[i * 4 + 1] + A[11] * B[i * 4 + 2] + A[15] * B[i * 4 + 3]
+      
+        return TMatrix(result)
 
         def mult_vec(self, vector):
             pass
 
     def __str__(self):
-        return "[{: 5.4f} | {: 5.4f} | {: 5.4f} | {: 5.4f}\n {: 5.4f} | {: 5.4f} | {: 5.4f} | {: 5.4f}\n {: 5.4f} | {: 5.4f} | {: 5.4f} | {: 5.4f}\n {: 5.4f} | {: 5.4f} | {: 5.4f} | {: 5.4f}]".format(
-            self.matrix_4x4[0][0], self.matrix_4x4[1][0], self.matrix_4x4[2][0], self.matrix_4x4[3][0],
-            self.matrix_4x4[0][1], self.matrix_4x4[1][1], self.matrix_4x4[2][1], self.matrix_4x4[3][1],
-            self.matrix_4x4[0][2], self.matrix_4x4[1][2], self.matrix_4x4[2][2], self.matrix_4x4[3][2],
-            self.matrix_4x4[0][3], self.matrix_4x4[1][3], self.matrix_4x4[2][3], self.matrix_4x4[3][3])
+        return "[{: 10.4f}, {: 10.4f}, {: 10.4f}, {: 10.4f};\n {: 10.4f}, {: 10.4f}, {: 10.4f}, {: 10.4f};\n {: 10.4f}, {: 10.4f}, {: 10.4f}, {: 10.4f};\n {: 10.4f}, {: 10.4f}, {: 10.4f}, {: 10.4f}]".format(
+            self.matrix_4x4[0], self.matrix_4x4[4], self.matrix_4x4[8], self.matrix_4x4[12],
+            self.matrix_4x4[1], self.matrix_4x4[5], self.matrix_4x4[9], self.matrix_4x4[13],
+            self.matrix_4x4[2], self.matrix_4x4[6], self.matrix_4x4[10], self.matrix_4x4[14],
+            self.matrix_4x4[3], self.matrix_4x4[7], self.matrix_4x4[11], self.matrix_4x4[15])
     
 # Free standing functions
 def make_trans_mat(x, y, z):
@@ -79,25 +90,21 @@ class Vector4:
         self.y = y
         self.z = z
 
-    def euclidean_distance(pt1, pt2):
-        pass
-    
-    
 # Testing
-print("-----Exercise 1.1-----")
-A = TMatrix([[1, 5, 9, 13], [2, 6, 10, 14], [3, 7, 11, 15], [4, 8, 12, 16]])
-B = TMatrix([[1, 9, 2, 10], [3, 11, 4, 12], [5, 13, 6, 14], [7, 15, 8, 16]])
+#print("-----Exercise 1.1-----")
+A = TMatrix([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
+B = TMatrix()
 print(A)
 print(B)
 
-print("-----Exercise 1.2-----")
-print("This is your translation matrix")
-print(make_trans_mat(1, 2, 3))
-print("These are your rotation matrices")
-print(make_rot_mat(45, 'x'))
-print(make_rot_mat(90, 'y'))
-print(make_rot_mat(120, 'z'))
-print("This is your scaling matrix")
-print(make_scale_mat(1, 2, 3))
-
+print(A.mult(B))
+# print("-----Exercise 1.2-----")
+# print("This is your translation matrix")
+# print(make_trans_mat(1, 2, 3))
+# print("These are your rotation matrices")
+# print(make_rot_mat(45, 'x'))
+# print(make_rot_mat(90, 'y'))
+# print(make_rot_mat(120, 'z'))
+# print("This is your scaling matrix")
+# print(make_scale_mat(1, 2, 3))
 
