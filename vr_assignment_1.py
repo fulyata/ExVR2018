@@ -49,7 +49,7 @@ class TMatrix:
     
 # Free standing functions
 def make_trans_mat(x, y, z):
-    trans_mat = TMatrix([1, 0, 0, x, 0, 1, 0, y,0, 0, 1, z, 0, 0, 0, 1])
+    trans_mat = TMatrix([1, 0, 0, 0, 0, 1, 0, 0,0, 0, 1, 0, x, y, z, 1])
     return trans_mat
 
 def make_rot_mat(degree, axis):
@@ -81,7 +81,7 @@ def make_scale_mat(sx, sy, sz):
     return scale_mat
 
 class Vector4:
-    def __init__(self, vector):
+    def __init__(self, vector=None):
         if vector is None:
             self.vector = [0, 0, 0, 0]
         else:
@@ -98,27 +98,42 @@ def euclidean_distance(point1, point2):
     w_diff = (point2.vector[3] - point1.vector[3])**2
     distance = math.sqrt((x_diff + y_diff + z_diff + w_diff))
     return distance
+
 # Testing
-print("-----Exercise 1.1-----")
-#A = TMatrix([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])
-#B = TMatrix()
+print("Exercise 1.1")
 A = TMatrix([1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15, 4, 8, 12, 16])
 B = TMatrix([1, 9, 2, 10, 3, 11, 4, 12, 5, 13, 6, 14, 7, 15, 8, 16])
 print(A)
 print(B)
-
 print("A * B:\n" + str(A.mult(B)))
 
-# print("-----Exercise 1.2-----")
-# print("This is your translation matrix")
-# print(make_trans_mat(1, 2, 3))
-# print("These are your rotation matrices")
-# print(make_rot_mat(45, 'x'))
-# print(make_rot_mat(90, 'y'))
-# print(make_rot_mat(120, 'z'))
-# print("This is your scaling matrix")
-# print(make_scale_mat(1, 2, 3))
+print("Exercise 1.2")
+print("Translation matrix with t_x = 1, t_y = 2, t_z = 3")
+print(make_trans_mat(1, 2, 3))
+print("Rotation matrix 45 degrees around x-axis")
+print(make_rot_mat(45, 'x'))
+print("Rotation matrix 90 degrees around y-axis")
+print(make_rot_mat(90, 'y'))
+print("Rotation matrix 120 degrees around z-axis")
+print(make_rot_mat(120, 'z'))
+print("Scaling matrix with s_x = 1, s_y = 2, s_z = 3")
+print(make_scale_mat(1, 2, 3))
 
+print("Exercise 1.3")
+print("The euclidean distance between Vector4([2, 4, 6, 2]) and Vector4([0, 0, 0, 1])")
 print(euclidean_distance(Vector4([2, 4, 6, 2]), Vector4([0, 0, 0, 1])))
+
+print("Exercise 1.4")
 b = Vector4([1, 2, 3, 1])
+print(b)
 print("A * b:\n" + str(A.mult_vec(b)))
+
+# 1.5
+# show that make_rot_mat(90, 'x') * make_rot_mat(180, 'z')
+# == make_rot_mat(180, 'y') * make_rot_mat(90, 'x')
+# see pdf for more info
+print("Exercise 1.5")
+print(make_rot_mat(90, 'x').mult(make_rot_mat(180, 'z')))
+print("==")
+print(make_rot_mat(180, 'y').mult(make_rot_mat(90, 'x')))
+
